@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "454546071560",
+    "project_id": "mobilapse",
+    "storage_bucket": "mobilapse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454546071560:android:5f9fa27c7d86d0d37371bd",
+        "android_client_info": {
+          "package_name": "com.iot.technion.mobilapse.mobi_lapse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454546071560-pdjpofd6dvi0kkeht5qqkckdqptdse26.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzgMVg2NyG_jW1wivjoqeVZoO45iewo1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454546071560-pdjpofd6dvi0kkeht5qqkckdqptdse26.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

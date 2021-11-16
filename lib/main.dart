@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -96,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Please select the number of plants in the garden track:',
-            textScaleFactor: 2),
+                'Please select the number of plants in the garden track:',
+                textScaleFactor: 2),
             MyStatefulWidget(),
             // Text(
             //   '$_counter',
@@ -105,14 +108,16 @@ class _MyHomePageState extends State<MyHomePage> {
             // ),
             TextButton(
                 style: TextButton.styleFrom(
-                    primary: Colors.black,
-                    backgroundColor: Colors.green,
-                    shadowColor: Colors.teal,
-                    fixedSize: const Size.fromWidth(300),
+                  primary: Colors.black,
+                  backgroundColor: Colors.green,
+                  shadowColor: Colors.teal,
+                  fixedSize: const Size.fromWidth(300),
                 ),
                 onPressed: () {},
                 child: const Text('Begin Capture', textScaleFactor: 1.4)),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.black,
@@ -124,7 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(
                           builder: (context) => const SecondRoute()));
                 },
-                child: const Text('Show previous lapses', textScaleFactor: 1.4)),
+                child:
+                    const Text('Show previous lapses', textScaleFactor: 1.4)),
           ],
         ),
       ),

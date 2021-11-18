@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 
 Future main() async {
@@ -65,7 +66,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
   int _counter = 0;
+  String downloadUrl = '';
 
   void _incrementCounter() {
     setState(() {
@@ -76,6 +80,27 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  Future<void> listExample() async {
+    firebase_storage.ListResult result =
+        await firebase_storage.FirebaseStorage.instance.ref().listAll();
+    print('done getting items');
+    result.items.forEach((firebase_storage.Reference ref) {
+      print('Found file: $ref');
+    });
+
+    result.prefixes.forEach((firebase_storage.Reference ref) {
+      print('Found directory: $ref');
+    });
+  }
+
+  Future<void> downloadURLExample() async {
+    downloadUrl = await firebase_storage.FirebaseStorage.instance
+        .ref('1eca8e1a-59fe-4df4-845c-fc1c38632eb3.jpg')
+        .getDownloadURL();
+
+    print(downloadUrl);
   }
 
   @override
@@ -127,7 +152,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   shadowColor: Colors.teal,
                   fixedSize: const Size.fromWidth(300),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await listExample();
+                  await downloadURLExample();
+                },
                 child: const Text('Begin Capture', textScaleFactor: 1.4)),
             SizedBox(
               height: 15,
@@ -141,7 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SecondRoute()));
+                          builder: (context) => SecondRoute(
+                                downloadUrl: downloadUrl,
+                              )));
                 },
                 child:
                     const Text('Show previous lapses', textScaleFactor: 1.4)),
@@ -205,7 +235,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 }
 
 class SecondRoute extends StatelessWidget {
-  const SecondRoute({Key? key}) : super(key: key);
+  const SecondRoute({Key? key, required this.downloadUrl}) : super(key: key);
+  final String downloadUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -214,11 +245,16 @@ class SecondRoute extends StatelessWidget {
         title: Text("Previous Lapses"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: Text('Go back!'),
+        child: Column(
+          children: [
+            Image.network(downloadUrl),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate back to first route when tapped.
+              },
+              child: Text('Go back!'),
+            )
+          ],
         ),
       ),
     );

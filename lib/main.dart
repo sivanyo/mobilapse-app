@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   // This widget is the root of your application.
   @override
@@ -27,7 +27,21 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Mobi Lapse'),
+      home: FutureBuilder(
+        future: _fbApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print('Error loading Firebase ${snapshot.error.toString()}');
+            return Text('Something went wrong!');
+          } else if (snapshot.hasData) {
+            return const MyHomePage(title: 'Mobi Lapse');
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

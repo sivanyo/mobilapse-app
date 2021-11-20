@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:mobi_lapse/prev_captures_view.dart';
+
+import 'capture_player.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -169,12 +172,27 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SecondRoute(
+                          builder: (context) => PrevCapturesViewRoute(
                                 downloadUrl: downloadUrl,
                               )));
                 },
                 child:
                     const Text('Show previous lapses', textScaleFactor: 1.4)),
+            SizedBox(
+              height: 15,
+            ),
+            TextButton(
+                style: TextButton.styleFrom(
+                    primary: Colors.black,
+                    backgroundColor: Colors.lightBlue,
+                    fixedSize: const Size.fromWidth(300)),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => VideoPlayerRoute()));
+                },
+                child: const Text('View video', textScaleFactor: 1.4)),
           ],
         ),
       ),
@@ -230,33 +248,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           child: Text(value),
         );
       }).toList(),
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({Key? key, required this.downloadUrl}) : super(key: key);
-  final String downloadUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Previous Lapses"),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Image.network(downloadUrl),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate back to first route when tapped.
-              },
-              child: Text('Go back!'),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

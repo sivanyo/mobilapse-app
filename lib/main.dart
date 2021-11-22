@@ -71,17 +71,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
-  int _counter = 0;
   String downloadUrl = '';
+  bool pressed = false;
 
-  void _incrementCounter() {
+  void _update_button() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      pressed = !pressed;
     });
   }
 
@@ -151,13 +146,14 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
                 style: TextButton.styleFrom(
                   primary: Colors.black,
-                  backgroundColor: Colors.green,
+                  backgroundColor: pressed ? Colors.red : Colors.green,
                   shadowColor: Colors.teal,
                   fixedSize: const Size.fromWidth(300),
                 ),
                 onPressed: () async {
-                  await listExample();
-                  await downloadURLExample();
+                  _update_button();
+                  // await listExample();
+                  // await downloadURLExample();
                 },
                 child: const Text('Begin Capture', textScaleFactor: 1.4)),
             SizedBox(
@@ -172,9 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PrevCapturesViewRoute(
-                                downloadUrl: downloadUrl,
-                              )));
+                          builder: (context) => CapturesViewRoute()));
                 },
                 child:
                     const Text('Show previous lapses', textScaleFactor: 1.4)),

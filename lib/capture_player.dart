@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerRoute extends StatefulWidget {
-  const VideoPlayerRoute({Key? key}) : super(key: key);
-
+  final String downloadURL;
+  const VideoPlayerRoute({Key? key, required this.downloadURL})
+      : super(key: key);
   @override
   _VideoAppState createState() => _VideoAppState();
 }
@@ -14,8 +15,7 @@ class _VideoAppState extends State<VideoPlayerRoute> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
+    _controller = VideoPlayerController.network(widget.downloadURL)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});

@@ -175,18 +175,18 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 15,
             ),
-            TextButton(
-                style: TextButton.styleFrom(
-                    primary: Colors.black,
-                    backgroundColor: Colors.lightBlue,
-                    fixedSize: const Size.fromWidth(300)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => VideoPlayerRoute()));
-                },
-                child: const Text('View video', textScaleFactor: 1.4)),
+            // TextButton(
+            //     style: TextButton.styleFrom(
+            //         primary: Colors.black,
+            //         backgroundColor: Colors.lightBlue,
+            //         fixedSize: const Size.fromWidth(300)),
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => VideoPlayerRoute()));
+            //     },
+            //     child: const Text('View video', textScaleFactor: 1.4)),
           ],
         ),
       ),

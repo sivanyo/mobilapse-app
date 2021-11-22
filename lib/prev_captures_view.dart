@@ -1,8 +1,9 @@
-import 'dart:html';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import 'capture_player.dart';
 
 class CapturesViewRoute extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
         ),
         body: FutureBuilder(
             future: getPreviousCaptures(),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<List<CaptureItem>> snapshot) {
               if (snapshot.hasError) {
                 print(snapshot);
                 print('Error!');
@@ -35,122 +36,89 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                   ),
                   onPressed: () async {
                     getPreviousCaptures();
-                    // await listExample();
-                    // await downloadURLExample();
                   },
                   child: const Text('Begin Capture', textScaleFactor: 1.4),
                 );
               } else if (snapshot.hasData) {
-                return Text('The answer to everything is ${snapshot.data}');
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                            'Watch ${snapshot.data![index].name.toString()}'),
+                        leading: Icon(
+                          Icons.videocam_rounded,
+                          color: Colors.blue,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VideoPlayerRoute(
+                                      downloadURL:
+                                          snapshot.data![index].downloadURL)));
+                        },
+                      );
+                    });
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-            })
-        // ListView(
-        //   padding: const EdgeInsets.all(8),
-        //   children: <Widget>[
-        //     Container(
-        //       height: 50,
-        //       color: Colors.amber[600],
-        //       child: const Center(child: Text('Entry A')),
-        //     ),
-        //     Container(
-        //       height: 50,
-        //       color: Colors.amber[500],
-        //       child: const Center(child: Text('Entry B')),
-        //     ),
-        //     Container(
-        //       height: 50,
-        //       color: Colors.amber[100],
-        //       child: const Center(child: Text('Entry C')),
-        //     ),
-        //   ],
-        // )
-        // Center(
-        //   child: Column(
-        //     children: [
-        //       Image.network(downloadUrl),
-        //     ],
-        //   ),
-        // ),
-        );
+            }));
   }
 }
 
-Future getPreviousCaptures() async {
+Future<List<CaptureItem>> getPreviousCaptures() async {
   print("CALLED!");
   List<CaptureItem> res = [];
   firebase_storage.ListResult result =
-      await firebase_storage.FirebaseStorage.instance.ref().list();
+      await firebase_storage.FirebaseStorage.instance.ref('captures').list();
   print('done getting items');
-  result.items.forEach((firebase_storage.Reference ref) {
+  for (firebase_storage.Reference ref in result.items) {
+    print(ref.getMetadata());
+    DateTime creationDate = getDateTimeFromName(ref.name);
+    String downloadURL = await ref.getDownloadURL();
+    // String downloadURL = "test";
+    CaptureItem capture =
+        CaptureItem(ref.name, creationDate, '5 minutes', downloadURL);
+    res.add(capture);
     print('Found file: $ref');
-  });
+  }
+  // result.items.forEach((firebase_storage.Reference ref) async {
+  //   print(ref.getMetadata());
+  //   DateTime creationDate = getDateTimeFromName(ref.name);
+  //   // String downloadURL = await ref.getDownloadURL();
+  //   String downloadURL = "test";
+  //   CaptureItem capture =
+  //       CaptureItem(ref.name, creationDate, '5 minutes', downloadURL);
+  //   res.add(capture);
+  //   print('Found file: $ref');
+  // });
 
+  print(res.length);
   return res;
 }
 
-class PrevCapturesViewRoute extends StatelessWidget {
-  PrevCapturesViewRoute({Key? key, required this.downloadUrl})
-      : super(key: key);
-  final String downloadUrl;
-  firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-  List<CaptureItem> captureList = [];
+DateTime getDateTimeFromName(String name) {
+  // final date_test = '2021-11-22T19-10-35';
+  final formatter = DateFormat(r'''yyyy-MM-dd'T'hh-mm-ss''');
 
-  Future<void> getPreviousCaptures() async {
-    List<CaptureItem> res;
-    firebase_storage.ListResult result =
-        await firebase_storage.FirebaseStorage.instance.ref('images').list();
-    print('done getting items');
-    result.items.forEach((firebase_storage.Reference ref) {
-      print('Found file: $ref');
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Previous Lapses"),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
-            Container(
-              height: 50,
-              color: Colors.amber[600],
-              child: const Center(child: Text('Entry A')),
-            ),
-            Container(
-              height: 50,
-              color: Colors.amber[500],
-              child: const Center(child: Text('Entry B')),
-            ),
-            Container(
-              height: 50,
-              color: Colors.amber[100],
-              child: const Center(child: Text('Entry C')),
-            ),
-          ],
-        )
-        // Center(
-        //   child: Column(
-        //     children: [
-        //       Image.network(downloadUrl),
-        //     ],
-        //   ),
-        // ),
-        );
-  }
+  DateTime formattedObj =
+      formatter.parse(name.split('_').last.split('.').first);
+  return formattedObj;
 }
 
 class CaptureItem {
   String name;
   DateTime creationDate;
   String length;
+  String downloadURL;
 
-  CaptureItem(this.name, this.creationDate, this.length);
+  @override
+  String toString() {
+    return 'CaptureItem{name: $name, creationDate: $creationDate, length: $length, downloadURL: $downloadURL}';
+  }
+
+  CaptureItem(this.name, this.creationDate, this.length, this.downloadURL);
 }

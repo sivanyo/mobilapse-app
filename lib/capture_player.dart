@@ -3,8 +3,10 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerRoute extends StatefulWidget {
   final String downloadURL;
+
   const VideoPlayerRoute({Key? key, required this.downloadURL})
       : super(key: key);
+
   @override
   _VideoAppState createState() => _VideoAppState();
 }
@@ -32,7 +34,17 @@ class _VideoAppState extends State<VideoPlayerRoute> {
               icon: Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context, false),
             ),
-            title: Text('Capture Player')),
+            title: Text('Capture Player'),
+            actions: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: IconButton(
+                    icon: Icon(Icons.delete, size: 26.0),
+                    onPressed: () {
+                      print("Pressed!");
+                    },
+                  ))
+            ]),
         body: Center(
           child: _controller.value.isInitialized
               ? AspectRatio(

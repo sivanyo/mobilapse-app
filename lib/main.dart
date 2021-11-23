@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:mobi_lapse/prev_captures_view.dart';
+import 'package:http/http.dart' as http;
 
 import 'capture_player.dart';
+
+// const String ROBOT_ADDRESS = 'http://pi';
+const String ROBOT_ADDRESS = 'http://localhost:5000';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,27 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> listExample() async {
-    firebase_storage.ListResult result =
-        await firebase_storage.FirebaseStorage.instance.ref().listAll();
-    print('done getting items');
-    result.items.forEach((firebase_storage.Reference ref) {
-      print('Found file: $ref');
-    });
-
-    result.prefixes.forEach((firebase_storage.Reference ref) {
-      print('Found directory: $ref');
-    });
-  }
-
-  Future<void> downloadURLExample() async {
-    downloadUrl = await firebase_storage.FirebaseStorage.instance
-        .ref('1eca8e1a-59fe-4df4-845c-fc1c38632eb3.jpg')
-        .getDownloadURL();
-
-    print(downloadUrl);
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -151,11 +136,27 @@ class _MyHomePageState extends State<MyHomePage> {
                   fixedSize: const Size.fromWidth(300),
                 ),
                 onPressed: () async {
-                  _update_button();
-                  // await listExample();
-                  // await downloadURLExample();
+                  try {
+                    if (!pressed) {
+                      print('Begin');
+                      await sendBeginCapture(3);
+                    } else {
+                      print('Stop');
+                      await sendStopCapture();
+                    }
+                    _update_button();
+                  } on http.ClientException catch (e) {
+                    print('Error connecting to the robot $e');
+                  } on Exception catch (e) {
+                    print('General exception $e');
+                  }
                 },
-                child: const Text('Begin Capture', textScaleFactor: 1.4)),
+                child: pressed
+                    ? const Text(
+                        'Stop Capture',
+                        textScaleFactor: 1.4,
+                      )
+                    : const Text('Begin Capture', textScaleFactor: 1.4)),
             SizedBox(
               height: 15,
             ),
@@ -175,26 +176,9 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 15,
             ),
-            // TextButton(
-            //     style: TextButton.styleFrom(
-            //         primary: Colors.black,
-            //         backgroundColor: Colors.lightBlue,
-            //         fixedSize: const Size.fromWidth(300)),
-            //     onPressed: () {
-            //       Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //               builder: (context) => VideoPlayerRoute()));
-            //     },
-            //     child: const Text('View video', textScaleFactor: 1.4)),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
@@ -246,17 +230,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 }
 
-// Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-// TextButton(style: TextButton.styleFrom(primary: Colors.black,
-// backgroundColor: Colors.green,
-// fixedSize: const Size.fromHeight(50)), onPressed: () {},
-// child: const Text('Play vid 1'),),
-// TextButton(style: TextButton.styleFrom(primary: Colors.black,
-// backgroundColor: Colors.green,
-// fixedSize: const Size.fromHeight(50)), onPressed: () {},
-// child: const Text('Play vid 2'),),
-// TextButton(style: TextButton.styleFrom(primary: Colors.black,
-// backgroundColor: Colors.green,
-// fixedSize: const Size.fromHeight(50)), onPressed: () {},
-// child: const Text('Play vid 3'))
-// ],)
+// TODO: add future builder with circle loading and udpating result after sending request
+
+Future<http.Response> sendBeginCapture(int numObjects) async {
+  print('Sending request to begin capture');
+  String body = jsonEncode(<String, dynamic>{
+    'message': 'Hello from flutter app ${DateTime.now()}',
+    'numObject': numObjects,
+    'action': 'Start'
+  });
+  print('Sending request to: ${ROBOT_ADDRESS}/capture');
+  print('Request body: $body');
+
+  return http.post(Uri.parse('${ROBOT_ADDRESS}/capture'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: body);
+}
+
+Future<http.Response> sendStopCapture() {
+  print('Sending request to stop capture');
+  String body = jsonEncode(<String, dynamic>{
+    'message': 'Hello from flutter app ${DateTime.now()}',
+    'action': 'Stop'
+  });
+
+  print('Sending request to: ${ROBOT_ADDRESS}/capture');
+  print('Request body: $body');
+  return http.post(Uri.parse('${ROBOT_ADDRESS}/capture'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body);
+}

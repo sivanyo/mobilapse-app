@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'capture_player.dart';
+import 'classes/capture_item.dart';
 
 class CapturesViewRoute extends StatefulWidget {
   @override
@@ -45,7 +45,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(
-                            'Watch ${snapshot.data![index].name.toString()}'),
+                            'Watch Capture ${index+1}'),
                         leading: Icon(
                           Icons.videocam_rounded,
                           color: Colors.blue,
@@ -57,6 +57,11 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                                   builder: (context) => VideoPlayerRoute(
                                       downloadURL:
                                           snapshot.data![index].downloadURL)));
+                        },
+                        onLongPress: () {
+                          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                              content: new Text(
+                                  'Filename: ${snapshot.data![index].name.toString()}')));
                         },
                       );
                     });
@@ -76,49 +81,25 @@ Future<List<CaptureItem>> getPreviousCaptures() async {
       await firebase_storage.FirebaseStorage.instance.ref('captures').list();
   print('done getting items');
   for (firebase_storage.Reference ref in result.items) {
-    print(ref.getMetadata());
+    firebase_storage.FullMetadata meta = await ref.getMetadata();
+    DateTime? creationTimeInFirebase = meta.timeCreated;
     DateTime creationDate = getDateTimeFromName(ref.name);
     String downloadURL = await ref.getDownloadURL();
     // String downloadURL = "test";
-    CaptureItem capture =
-        CaptureItem(ref.name, creationDate, '5 minutes', downloadURL);
+    CaptureItem capture = CaptureItem(ref.name, creationDate, '5 minutes',
+        downloadURL, creationTimeInFirebase);
     res.add(capture);
     print('Found file: $ref');
   }
-  // result.items.forEach((firebase_storage.Reference ref) async {
-  //   print(ref.getMetadata());
-  //   DateTime creationDate = getDateTimeFromName(ref.name);
-  //   // String downloadURL = await ref.getDownloadURL();
-  //   String downloadURL = "test";
-  //   CaptureItem capture =
-  //       CaptureItem(ref.name, creationDate, '5 minutes', downloadURL);
-  //   res.add(capture);
-  //   print('Found file: $ref');
-  // });
 
   print(res.length);
   return res;
 }
 
 DateTime getDateTimeFromName(String name) {
-  // final date_test = '2021-11-22T19-10-35';
   final formatter = DateFormat(r'''yyyy-MM-dd'T'hh-mm-ss''');
 
   DateTime formattedObj =
       formatter.parse(name.split('_').last.split('.').first);
   return formattedObj;
-}
-
-class CaptureItem {
-  String name;
-  DateTime creationDate;
-  String length;
-  String downloadURL;
-
-  @override
-  String toString() {
-    return 'CaptureItem{name: $name, creationDate: $creationDate, length: $length, downloadURL: $downloadURL}';
-  }
-
-  CaptureItem(this.name, this.creationDate, this.length, this.downloadURL);
 }

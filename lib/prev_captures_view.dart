@@ -19,7 +19,8 @@ class _CapturesViewState extends State<CapturesViewRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Previous Lapses"),
+          title: const Text("Previous Lapses"),
+          backgroundColor: Colors.green,
         ),
         body: FutureBuilder(
             future: getPreviousCaptures(),
@@ -45,10 +46,15 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(
-                            'Watch Capture ${index+1}'),
-                        leading: Icon(
+                            'Watch Capture ${index+1}',
+                        style: const TextStyle(
+                            fontFamily: 'A',
+                            color: Colors.green
+                        ),
+                        ),
+                        leading: const Icon(
                           Icons.videocam_rounded,
-                          color: Colors.blue,
+                          color: Colors.greenAccent,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -59,8 +65,8 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                                           snapshot.data![index].downloadURL)));
                         },
                         onLongPress: () {
-                          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                              content: new Text(
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
                                   'Filename: ${snapshot.data![index].name.toString()}')));
                         },
                       );

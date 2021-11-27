@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        backgroundColor: Colors.green
       ),
       home: FutureBuilder(
         future: _fbApp,
@@ -99,12 +100,13 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        backgroundColor: Colors.green,
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
+          // Column is also a lasyout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
           //
@@ -121,8 +123,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-                'Please select the number of plants in the garden track:',
-                textScaleFactor: 2),
+              'Please select the number of plants in the garden track:',
+              textScaleFactor: 2,
+              style: TextStyle(fontFamily: 'BIG'),),
             MyStatefulWidget(),
             // Text(
             //   '$_counter',
@@ -133,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   primary: Colors.black,
                   backgroundColor: pressed ? Colors.red : Colors.green,
                   shadowColor: Colors.teal,
-                  fixedSize: const Size.fromWidth(300),
+                  fixedSize: const Size.fromHeight(40),
                 ),
                 onPressed: () async {
                   try {
@@ -153,18 +156,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: pressed
                     ? const Text(
-                        'Stop Capture',
-                        textScaleFactor: 1.4,
-                      )
-                    : const Text('Begin Capture', textScaleFactor: 1.4)),
-            SizedBox(
-              height: 15,
+                  'Stop Capture',
+                  textScaleFactor: 1.4,
+                )
+                    : const Text(
+                    'Begin Capture', textScaleFactor: 1.4)),
+            const SizedBox(
+              height: 8,
             ),
             TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.black,
                     backgroundColor: Colors.lightBlue,
-                    fixedSize: const Size.fromWidth(300)),
+                    fixedSize: const Size.fromHeight(40)),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -172,9 +176,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           builder: (context) => CapturesViewRoute()));
                 },
                 child:
-                    const Text('Show previous lapses', textScaleFactor: 1.4)),
-            SizedBox(
-              height: 15,
+                const Text('Show previous lapses', textScaleFactor: 1.4)),
+            const SizedBox(
+              height: 8,
+            ),
+            Image.asset(
+                'assets/images/icon.jpeg',
+                fit: BoxFit.fitWidth
             ),
           ],
         ),
@@ -210,7 +218,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       icon: const Icon(Icons.arrow_downward),
       iconSize: 28,
       elevation: 24,
-      style: const TextStyle(color: Colors.deepPurple),
+      style: const TextStyle(color: Colors.deepPurple, fontFamily: 'C'),
       underline: Container(
         height: 3,
         color: Colors.deepPurpleAccent,

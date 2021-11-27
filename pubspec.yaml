@@ -69,6 +69,8 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
+  assets:
+    - assets/images/icon.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -91,6 +93,20 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+
+  fonts:
+    - family: A
+      fonts:
+        - asset: assets/fonts/FredokaOne-Regular.ttf
+    - family: BIG
+      fonts:
+        - asset: assets/fonts/AlfaSlabOne-Regular.ttf
+    - family: C
+      fonts:
+        - asset: assets/fonts/PermanentMarker-Regular.ttf
+    - family: D
+      fonts:
+        - asset: assets/fonts/Lobster-Regular.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

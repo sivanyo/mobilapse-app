@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'capture_player.dart';
 
 // const String ROBOT_ADDRESS = 'http://pi';
-const String ROBOT_ADDRESS = 'http://localhost:5000';
+const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       await sendBeginCapture(3);
                     } else {
                       print('Stop');
-                      await sendStopCapture();
+                      await sendStopCapture(3);
                     }
                     _update_button();
                   } on http.ClientException catch (e) {
@@ -244,8 +244,8 @@ Future<http.Response> sendBeginCapture(int numObjects) async {
   print('Sending request to begin capture');
   String body = jsonEncode(<String, dynamic>{
     'message': 'Hello from flutter app ${DateTime.now()}',
-    'numObject': numObjects,
-    'action': 'Start'
+    'numObjects': numObjects,
+    'command': 'start'
   });
   print('Sending request to: ${ROBOT_ADDRESS}/capture');
   print('Request body: $body');
@@ -257,11 +257,12 @@ Future<http.Response> sendBeginCapture(int numObjects) async {
       body: body);
 }
 
-Future<http.Response> sendStopCapture() {
+Future<http.Response> sendStopCapture(int numObjects) {
   print('Sending request to stop capture');
   String body = jsonEncode(<String, dynamic>{
     'message': 'Hello from flutter app ${DateTime.now()}',
-    'action': 'Stop'
+    'command': 'stop',
+    'numObjects': numObjects
   });
 
   print('Sending request to: ${ROBOT_ADDRESS}/capture');

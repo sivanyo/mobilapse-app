@@ -10,6 +10,7 @@ import 'capture_player.dart';
 
 // const String ROBOT_ADDRESS = 'http://pi';
 const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
+String NUM_OF_OBJECTS = "3";
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -140,12 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onPressed: () async {
                   try {
+                    int numAsInt = int.parse(NUM_OF_OBJECTS);
                     if (!pressed) {
                       print('Begin');
-                      await sendBeginCapture(3);
+                      await sendBeginCapture(numAsInt);
                     } else {
                       print('Stop');
-                      await sendStopCapture(3);
+                      await sendStopCapture(numAsInt);
                     }
                     _update_button();
                   } on http.ClientException catch (e) {
@@ -201,7 +203,6 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  String dropdownValue = '3';
 
   List<String> getItemList() {
     List<String> res = [];
@@ -214,7 +215,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: dropdownValue,
+      value: NUM_OF_OBJECTS,
       icon: const Icon(Icons.arrow_downward),
       iconSize: 28,
       elevation: 24,
@@ -225,7 +226,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       onChanged: (String? newValue) {
         setState(() {
-          dropdownValue = newValue!;
+          NUM_OF_OBJECTS = newValue!;
         });
       },
       items: getItemList().map<DropdownMenuItem<String>>((String value) {

@@ -49,8 +49,15 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                             'Watch Capture ${index+1}',
                         style: const TextStyle(
                             fontFamily: 'A',
-                            color: Colors.green
+                            color: Colors.black
                         ),
+                        ),
+                        subtitle: Text(
+                            'captured at ${snapshot.data!.elementAt(index).creationDate}',
+                          style: const TextStyle(
+                            fontFamily: 'B',
+                            color: Colors.green
+                          ),
                         ),
                         leading: const Icon(
                           Icons.videocam_rounded,
@@ -97,6 +104,7 @@ Future<List<CaptureItem>> getPreviousCaptures() async {
     res.add(capture);
     print('Found file: $ref');
   }
+  res.sort((a, b) => a.creationDate.compareTo(b.creationDate));
 
   print(res.length);
   return res;

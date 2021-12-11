@@ -28,6 +28,10 @@ class _VideoAppState extends State<VideoPlayerRoute> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Video Demo',
+      theme: ThemeData(
+          primarySwatch: Colors.green,
+          backgroundColor: Colors.green
+      ),
       home: Scaffold(
         appBar: AppBar(
             leading: IconButton(

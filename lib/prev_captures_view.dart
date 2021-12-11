@@ -104,10 +104,21 @@ Future<List<CaptureItem>> getPreviousCaptures() async {
     res.add(capture);
     print('Found file: $ref');
   }
-  res.sort((a, b) => a.creationDate.compareTo(b.creationDate));
-
-  print(res.length);
+  print(res.first.name);
+  // res.sort((a, b) => getObjectNum(a.name).compareTo(getObjectNum(b.name)));
+  // res.sort((a, b) => a.creationDate.compareTo(b.creationDate));
+  res.sort((a,b) {
+    int cmp = a.creationDate.compareTo(b.creationDate);
+    if(cmp != 0) return cmp;
+    return getObjectNum(a.name).compareTo(getObjectNum(b.name));
+  });
   return res;
+}
+
+int getObjectNum(String name){
+  var splitted = name.split('_');
+  String objectNum = splitted[1];
+  return int.parse(objectNum);
 }
 
 DateTime getDateTimeFromName(String name) {

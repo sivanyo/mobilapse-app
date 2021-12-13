@@ -182,10 +182,10 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 8,
             ),
-            Image.asset(
+            Expanded(child: Image.asset(
                 'assets/images/icon.jpeg',
                 fit: BoxFit.fitWidth
-            ),
+            ),)
           ],
         ),
       ),

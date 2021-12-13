@@ -53,7 +53,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                         ),
                         ),
                         subtitle: Text(
-                            'captured at ${snapshot.data!.elementAt(index).creationDate}',
+                            '${snapshot.data!.elementAt(index).name}, captured at ${snapshot.data!.elementAt(index).creationDate}',
                           style: const TextStyle(
                             fontFamily: 'B',
                             color: Colors.green

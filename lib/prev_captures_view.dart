@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'capture_player.dart';
 import 'classes/capture_item.dart';
 
+//todo : fix date time formating to 24-hours formating
+
 class CapturesViewRoute extends StatefulWidget {
   @override
   _CapturesViewState createState() => _CapturesViewState();

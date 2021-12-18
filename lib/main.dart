@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:mobi_lapse/prev_captures_view.dart';
 import 'package:http/http.dart' as http;
 
+import 'angels_list.dart';
+import 'angle.dart';
 import 'capture_player.dart';
 
 // const String ROBOT_ADDRESS = 'http://pi';
@@ -127,11 +129,11 @@ class _MyHomePageState extends State<MyHomePage> {
               'Please select the number of plants in the garden track:',
               textScaleFactor: 2,
               style: TextStyle(fontFamily: 'BIG'),),
-            MyStatefulWidget(),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headline4,
-            // ),
+            const Expanded(
+                child: Center(
+                  child: AngelsList()
+                ),
+            ),
             TextButton(
                 style: TextButton.styleFrom(
                   primary: Colors.black,
@@ -182,62 +184,54 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 8,
             ),
-            Expanded(child: Image.asset(
-                'assets/images/icon.jpeg',
-                fit: BoxFit.fitWidth
-            ),)
+            // Expanded(child: Image.asset(
+            //     'assets/images/icon.jpeg',
+            //     fit: BoxFit.fitWidth
+            // ),)
           ],
         ),
-      ),
+      )
     );
   }
 }
 
 /// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
+// class MyStatefulWidget extends StatefulWidget {
+//   const MyStatefulWidget({Key? key}) : super(key: key);
+//
+//   @override
+//   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+// }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-
-  List<String> getItemList() {
-    List<String> res = [];
-    for (int i = 1; i <= 10; i++) {
-      res.add(i.toString());
-    }
-    return res;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: NUM_OF_OBJECTS,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 28,
-      elevation: 24,
-      style: const TextStyle(color: Colors.deepPurple, fontFamily: 'C'),
-      underline: Container(
-        height: 3,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          NUM_OF_OBJECTS = newValue!;
-        });
-      },
-      items: getItemList().map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-}
+// class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return DropdownButton<String>(
+//       value: NUM_OF_OBJECTS,
+//       icon: const Icon(Icons.arrow_downward),
+//       iconSize: 28,
+//       elevation: 24,
+//       style: const TextStyle(color: Colors.deepPurple, fontFamily: 'C'),
+//       underline: Container(
+//         height: 3,
+//         color: Colors.deepPurpleAccent,
+//       ),
+//       onChanged: (String? newValue) {
+//         setState(() {
+//           NUM_OF_OBJECTS = newValue!;
+//         });
+//       },
+//       items: getItemList().map<DropdownMenuItem<String>>((String value) {
+//         return DropdownMenuItem<String>(
+//           value: value,
+//           child: Text(value),
+//         );
+//       }).toList(),
+//     );
+//   }
+// }
 
 // TODO: add future builder with circle loading and udpating result after sending request
 

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'angle.dart';
 
-List<String> ITEMS = ['1'];
-List<Angle> ANGLES = [const Angle()];
+List<Angle> ANGLES = [Angle()];
 
 class AngelsList extends StatefulWidget {
   const AngelsList({Key? key}) : super(key: key);
@@ -17,33 +16,43 @@ class _AngelsList extends State<AngelsList> {
   Widget build(BuildContext context) {
     _add() {
       setState(() {
-        ANGLES.add(new Angle());
+        ANGLES.add(Angle());
       });
-    };
+    }
     return Scaffold(
-        body: ListView.builder(
-            shrinkWrap: true,
-            itemCount: ITEMS.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Choose the angle for item ${index + 1}',
-                  style: const TextStyle(
-                      fontFamily: 'A',
-                      color: Colors.black
-                  ),
-                ),
-                leading: ANGLES[index],
-              );
-            }
+        body:
+        Scrollbar(
+          child:
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: ANGLES.length,
+              itemBuilder: (context, index) {
+                return Center(
+                  child: ListTile(
+                    title: Text('Choose the angle for item ${index + 1}',
+                      style: const TextStyle(
+                          fontFamily: 'A',
+                          color: Colors.black
+                      ),
+                    ),
+                    leading: ANGLES[index],
+                  )
+                );
+              }
+          )
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               print('pressed');
               _add();
+              print(ANGLES.length);
             },
             backgroundColor: Colors.green,
-            child: const Icon(Icons.navigation)
-        )
+            icon: const Icon(Icons.add),
+          label: const Text('Add plant'),
+        ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerDocked,
     )
     ;
   }

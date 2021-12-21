@@ -2,14 +2,18 @@ import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobi_lapse/prev_captures_view.dart';
 import 'package:http/http.dart' as http;
 
-import 'angels_list.dart';
+import 'angles_list.dart';
 
 // const String ROBOT_ADDRESS = 'http://pi';
-const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
+// Mor hotspot
+// const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
+// Shahar hotspot
+const String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,10 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mobi Lapse',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        backgroundColor: Colors.green
-      ),
+      theme:
+          ThemeData(primarySwatch: Colors.blue, backgroundColor: Colors.green),
       home: FutureBuilder(
         future: _fbApp,
         builder: (context, snapshot) {
@@ -72,99 +74,117 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.green,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Please configure the number of plants and their location in the track:',
-              textScaleFactor: 2,
-              style: TextStyle(fontFamily: 'BIG'),),
-            const Expanded(
-                child: Center(
-                  child: AngelsList()
-                ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.black,
-                  backgroundColor: pressed ? Colors.red : Colors.green,
-                  shadowColor: Colors.teal,
-                  fixedSize: const Size.fromHeight(40),
-                ),
-                onPressed: () async {
-                  try {
-                    int numberOfItems = ANGLES.length;
-                    List<String> angels = [];
-                    for (int i = 0; i<numberOfItems; i++){
-                      angels.add(ANGLES[i].toString());
-                    }
-                    print(angels);
-                    if (!pressed) {
-                      print('Begin');
-                      await sendBeginCapture(numberOfItems, angels);
-                    } else {
-                      print('Stop');
-                      await sendStopCapture(numberOfItems);
-                    }
-                    _update_button();
-                  } on http.ClientException catch (e) {
-                    print('Error connecting to the robot $e');
-                  } on Exception catch (e) {
-                    print('General exception $e');
-                  }
-                },
-                child: pressed
-                    ? const Text(
-                  'Stop Capture',
-                  textScaleFactor: 1.4,
-                )
-                    : const Text(
-                    'Begin Capture', textScaleFactor: 1.4)),
-            const SizedBox(
-              height: 8,
-            ),
-            TextButton(
-                style: TextButton.styleFrom(
-                    primary: Colors.black,
-                    backgroundColor: Colors.lightBlue,
-                    fixedSize: const Size.fromHeight(40)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CapturesViewRoute()));
-                },
-                child:
-                const Text('Show previous lapses', textScaleFactor: 1.4)),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(child: Image.asset(
-                'assets/images/icon.jpeg',
-                fit: BoxFit.fitWidth
-            ),)
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
+          backgroundColor: Colors.green,
         ),
-      )
-    );
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Image.asset(
+                  'assets/images/icon.jpeg',
+                  fit: BoxFit.fitWidth,
+                  width: 200,
+                ),
+              ),
+              const Text(
+                'Please configure the number of plants and their location in the track:',
+                textScaleFactor: 1,
+                style: TextStyle(fontSize: 25),
+              ),
+              const Expanded(
+                child: Center(child: AnglesList()),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: pressed ? Colors.red : Colors.green,
+                        shadowColor: Colors.teal,
+                        fixedSize: const Size.fromHeight(30),
+                      ),
+                      onPressed: () async {
+                        try {
+                          int numberOfItems = ANGLES.length;
+                          List<String> angels = [];
+                          for (int i = 0; i < numberOfItems; i++) {
+                            angels.add(ANGLES[i].toString());
+                          }
+                          print(angels);
+                          if (!pressed) {
+                            print('Begin');
+                            await sendBeginCapture(numberOfItems, angels);
+                          } else {
+                            print('Stop');
+                            await sendStopCapture(numberOfItems);
+                          }
+                          _update_button();
+                        } on http.ClientException catch (e) {
+                          print('Error connecting to the robot $e');
+                        } on Exception catch (e) {
+                          print('General exception $e');
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(Icons.video_call),
+                          const SizedBox.square(
+                            dimension: 2,
+                          ),
+                          (pressed
+                              ? const Text(
+                                  'Stop Capture',
+                                  textScaleFactor: 1.4,
+                                )
+                              : const Text('Begin Capture',
+                                  textScaleFactor: 1.4)),
+                        ],
+                      )),
+                  ElevatedButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.lightBlue,
+                        fixedSize: const Size.fromHeight(30)),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CapturesViewRoute()));
+                    },
+                    child: Row(children: const [
+                      Icon(Icons.video_library),
+                      SizedBox.square(
+                        dimension: 2,
+                      ),
+                      Text('Show previous lapses', textScaleFactor: 1.4)
+                    ]),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ));
   }
 }
 
-// TODO: add future builder with circle loading and udpating result after sending request
+// TODO: add future builder with circle loading and updating result after sending request
 
-Future<http.Response> sendBeginCapture(int numObjects, List<String> angels) async {
+Future<http.Response> sendBeginCapture(
+    int numObjects, List<String> angles) async {
   print('Sending request to begin capture');
   String body = jsonEncode(<String, dynamic>{
     'message': 'Hello from flutter app ${DateTime.now()}',
     'numObjects': numObjects,
+    'objectAngleList': angles,
     'command': 'start'
   });
   print('Sending request to: ${ROBOT_ADDRESS}/capture');
@@ -193,3 +213,8 @@ Future<http.Response> sendStopCapture(int numObjects) {
       },
       body: body);
 }
+
+// TODO: when a capture is running, disable the list modification buttons
+// TODO: dropdownlist text should be human readable, and the text inside the list should be CONST_FORMAT
+// TODO: update the previous captures list every time a new Capture object is generated, don't generate them all at the same time and just then return
+// to make the app feel smoother

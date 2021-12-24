@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobi_lapse/main.dart';
 import 'angle.dart';
 
 List<Angle> ANGLES = [Angle()];
@@ -15,13 +16,15 @@ class _AnglesList extends State<AnglesList> {
   Widget build(BuildContext context) {
     _add() {
       setState(() {
-        ANGLES.add(Angle());
+        if(Capturing != 1){
+          ANGLES.add(Angle());
+        }
       });
     }
 
     _remove() {
       setState(() {
-        if (ANGLES.isNotEmpty) {
+        if (ANGLES.isNotEmpty && Capturing != 1) {
           ANGLES.remove(ANGLES.elementAt(ANGLES.length - 1));
         }
       });

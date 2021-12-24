@@ -14,6 +14,7 @@ import 'angles_list.dart';
 // const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
 // Shahar hotspot
 const String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
+int Capturing = 0;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -119,9 +120,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           print(angels);
                           if (!pressed) {
                             print('Begin');
+                            Capturing = 1;
                             await sendBeginCapture(numberOfItems, angels);
                           } else {
                             print('Stop');
+                            Capturing = 0;
                             await sendStopCapture(numberOfItems);
                           }
                           _update_button();

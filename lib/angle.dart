@@ -24,7 +24,7 @@ class _AngleState extends State<Angle> {
       icon: const Icon(Icons.arrow_downward),
       iconSize: 28,
       elevation: 24,
-      style: const TextStyle(color: Colors.black, fontFamily: 'A'),
+      style: const TextStyle(color: Colors.black),
       underline: Container(
         height: 3,
         color: Colors.green,

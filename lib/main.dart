@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Mobi Lapse',
       theme:
@@ -47,7 +46,9 @@ class MyApp extends StatelessWidget {
           } else {
             return const Center(
               child: CircularProgressIndicator(),
-            );}},
+            );
+          }
+        },
       ),
     );
   }
@@ -106,51 +107,51 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 children: [
                   ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: pressed ? Colors.red : Colors.green,
-                        shadowColor: Colors.teal,
-                        fixedSize: const Size.fromHeight(30),
-                      ),
-                      onPressed: () async {
-                        try {
-                          int numberOfItems = ANGLES.length;
-                          List<String> angels = [];
-                          for (int i = 0; i < numberOfItems; i++) {
-                            angels.add(ParseAngle(ANGLES[i].toString()));
-                          }
-                          print(angels);
-                          if (!pressed) {
-                            print('Begin');
-                            Capturing = 1;
-                            await sendBeginCapture(numberOfItems, angels);
-                          } else {
-                            print('Stop');
-                            Capturing = 0;
-                            await sendStopCapture(numberOfItems);
-                          }
-                          _update_button();
-                        } on http.ClientException catch (e) {
-                          print('Error connecting to the robot $e');
-                        } on Exception catch (e) {
-                          print('General exception $e');
+                    style: TextButton.styleFrom(
+                      primary: Colors.white,
+                      backgroundColor: pressed ? Colors.red : Colors.green,
+                      shadowColor: Colors.teal,
+                      fixedSize: const Size.fromHeight(30),
+                    ),
+                    onPressed: () async {
+                      try {
+                        int numberOfItems = ANGLES.length;
+                        List<String> angels = [];
+                        for (int i = 0; i < numberOfItems; i++) {
+                          angels.add(ParseAngle(ANGLES[i].toString()));
                         }
-                      },
-                      child: Row(
-                        children: [
-                          const Icon(Icons.video_call),
-                          const SizedBox.square(
-                            dimension: 2,
-                          ),
-                          (pressed
-                              ? const Text(
-                                  'Stop Capture',
-                                  textScaleFactor: 1.4,
-                                )
-                              : const Text('Begin Capture',
-                                  textScaleFactor: 1.4)),
-                        ],
-                      ),
+                        print(angels);
+                        if (!pressed) {
+                          print('Begin');
+                          Capturing = 1;
+                          await sendBeginCapture(numberOfItems, angels);
+                        } else {
+                          print('Stop');
+                          Capturing = 0;
+                          await sendStopCapture(numberOfItems);
+                        }
+                        _update_button();
+                      } on http.ClientException catch (e) {
+                        print('Error connecting to the robot $e');
+                      } on Exception catch (e) {
+                        print('General exception $e');
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.video_call),
+                        const SizedBox.square(
+                          dimension: 2,
+                        ),
+                        (pressed
+                            ? const Text(
+                                'Stop Capture',
+                                textScaleFactor: 1.4,
+                              )
+                            : const Text('Begin Capture',
+                                textScaleFactor: 1.4)),
+                      ],
+                    ),
                   ),
                   ElevatedButton(
                     style: TextButton.styleFrom(
@@ -184,21 +185,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // TODO: add future builder with circle loading and updating result after sending request
 
-Future<void> ActivateListeners() async{
+Future<void> activateListeners() async {
   final databaseReference = FirebaseDatabase.instance.ref();
-  databaseReference
-      .child('ROBOT_IP')
-      .onValue.listen((event) {
+  print('Getting ROBOT_IP');
+  databaseReference.child('ROBOT_IP').onValue.listen((event) {
     ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";
-    print("@");
-    print(event.snapshot.value);
+    print('IP received from server: ${event.snapshot.value}');
+  });
+  databaseReference.child('lastUpdated').onValue.listen((event) {
+    print('The IP address was last updated at: ${event.snapshot.value}');
   });
 }
 
 Future<http.Response> sendBeginCapture(
     int numObjects, List<String> angles) async {
-  await ActivateListeners();
-  print(ROBOT_ADDRESS);
+  await activateListeners();
+  print('Complete ROBOT_IP is: $ROBOT_ADDRESS');
   print('Sending request to begin capture');
   String body = jsonEncode(<String, dynamic>{
     'message': 'Hello from flutter app ${DateTime.now()}',
@@ -206,10 +208,10 @@ Future<http.Response> sendBeginCapture(
     'objectAngleList': angles,
     'command': 'start'
   });
-  print('Sending request to: ${ROBOT_ADDRESS}/capture');
+  print('Sending request to: $ROBOT_ADDRESS/capture');
   print('Request body: $body');
 
-  return http.post(Uri.parse('${ROBOT_ADDRESS}/capture'),
+  return http.post(Uri.parse('$ROBOT_ADDRESS/capture'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
@@ -224,17 +226,17 @@ Future<http.Response> sendStopCapture(int numObjects) {
     'numObjects': numObjects
   });
 
-  print('Sending request to: ${ROBOT_ADDRESS}/capture');
+  print('Sending request to: $ROBOT_ADDRESS/capture');
   print('Request body: $body');
-  return http.post(Uri.parse('${ROBOT_ADDRESS}/capture'),
+  return http.post(Uri.parse('$ROBOT_ADDRESS/capture'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: body);
 }
 
-String ParseAngle(String angle){
-  if(angle == angels[2]) {
+String ParseAngle(String angle) {
+  if (angle == angels[2]) {
     return angle.toUpperCase();
   }
   var splitted = angle.split(' ');

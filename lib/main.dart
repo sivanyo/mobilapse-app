@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,12 @@ import 'angles_list.dart';
 // Mor hotspot
 // const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
 // Shachar hotspot
-const String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
+String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
 int Capturing = 0;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
 
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Mobi Lapse',
       theme:
@@ -181,8 +184,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // TODO: add future builder with circle loading and updating result after sending request
 
+final databaseReference = FirebaseDatabase.instance.reference();
+
+void ActivateListeners(){
+  databaseReference
+      .child('ROBOT_IP')
+      .onValue.listen((event) {
+    ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";
+  });
+}
+
 Future<http.Response> sendBeginCapture(
     int numObjects, List<String> angles) async {
+  ActivateListeners();
+  print(ROBOT_ADDRESS);
   print('Sending request to begin capture');
   String body = jsonEncode(<String, dynamic>{
     'message': 'Hello from flutter app ${DateTime.now()}',
@@ -224,6 +239,4 @@ String ParseAngle(String angle){
   var splitted = angle.split(' ');
   return "${splitted[0].toUpperCase()}_${splitted[1].toUpperCase()}";
 }
-
-// TODO: update the previous captures list every time a new Capture object is generated, don't generate them all at the same time and just then return
 // to make the app feel smoother

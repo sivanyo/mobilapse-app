@@ -13,7 +13,7 @@ import 'angles_list.dart';
 // const String ROBOT_ADDRESS = 'http://pi';
 // Mor hotspot
 // const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
-// Shahar hotspot
+// Shachar hotspot
 const String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
 int Capturing = 0;
 
@@ -44,9 +44,7 @@ class MyApp extends StatelessWidget {
           } else {
             return const Center(
               child: CircularProgressIndicator(),
-            );
-          }
-        },
+            );}},
       ),
     );
   }
@@ -227,6 +225,5 @@ String ParseAngle(String angle){
   return "${splitted[0].toUpperCase()}_${splitted[1].toUpperCase()}";
 }
 
-// TODO: when a capture is running, disable the list modification buttons
 // TODO: update the previous captures list every time a new Capture object is generated, don't generate them all at the same time and just then return
 // to make the app feel smoother

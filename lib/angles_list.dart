@@ -49,7 +49,8 @@ class _AnglesList extends State<AnglesList> {
                           const TextStyle(fontFamily: 'A', color: Colors.black),
                     ),
                     leading: ANGLES[index],
-                  ));
+                  )
+                  );
                 }),
           ),
           Row(

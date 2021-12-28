@@ -184,19 +184,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
 // TODO: add future builder with circle loading and updating result after sending request
 
-final databaseReference = FirebaseDatabase.instance.reference();
-
-void ActivateListeners(){
+Future<void> ActivateListeners() async{
+  final databaseReference = FirebaseDatabase.instance.reference();
   databaseReference
       .child('ROBOT_IP')
       .onValue.listen((event) {
     ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";
+    print("@");
+    print(event.snapshot.value);
   });
 }
 
 Future<http.Response> sendBeginCapture(
     int numObjects, List<String> angles) async {
-  ActivateListeners();
+  await ActivateListeners();
   print(ROBOT_ADDRESS);
   print('Sending request to begin capture');
   String body = jsonEncode(<String, dynamic>{

@@ -33,14 +33,12 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                 return TextButton(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.red,
                     shadowColor: Colors.teal,
                     fixedSize: const Size.fromWidth(300),
                   ),
-                  onPressed: () async {
-                    getPreviousCaptures();
-                  },
-                  child: const Text('Begin Capture', textScaleFactor: 1.4),
+                  onPressed: () {},
+                  child: const Text('ERROR'),
                 );
               } else if (snapshot.hasData) {
                 return ListView.builder(
@@ -48,18 +46,14 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(
-                            'Watch Capture ${index+1}',
-                        style: const TextStyle(
-                            fontFamily: 'A',
-                            color: Colors.black
-                        ),
+                          'Watch Capture ${index + 1}',
+                          style: const TextStyle(
+                              fontFamily: 'A', color: Colors.black),
                         ),
                         subtitle: Text(
-                            '${snapshot.data!.elementAt(index).name}, captured at ${snapshot.data!.elementAt(index).creationDate}',
+                          '${snapshot.data!.elementAt(index).name}, captured at ${snapshot.data!.elementAt(index).creationDate}',
                           style: const TextStyle(
-                            fontFamily: 'B',
-                            color: Colors.green
-                          ),
+                              fontFamily: 'B', color: Colors.green),
                         ),
                         leading: const Icon(
                           Icons.videocam_rounded,
@@ -109,15 +103,15 @@ Future<List<CaptureItem>> getPreviousCaptures() async {
   print(res.first.name);
   // res.sort((a, b) => getObjectNum(a.name).compareTo(getObjectNum(b.name)));
   // res.sort((a, b) => a.creationDate.compareTo(b.creationDate));
-  res.sort((a,b) {
+  res.sort((a, b) {
     int cmp = a.creationDate.compareTo(b.creationDate);
-    if(cmp != 0) return cmp;
+    if (cmp != 0) return cmp;
     return getObjectNum(a.name).compareTo(getObjectNum(b.name));
   });
   return res;
 }
 
-int getObjectNum(String name){
+int getObjectNum(String name) {
   var splitted = name.split('_');
   String objectNum = splitted[1];
   return int.parse(objectNum);

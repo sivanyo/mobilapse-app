@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var angels =  ["HARD_RIGHT", "SOFT_RIGHT", "STRAIGHT", "SOFT_LEFT", "HARD_LEFT"];
+var angels =  ["hard right", "soft right", "straight", "soft left", "hard left"];
 
 class Angle extends StatefulWidget {
   Angle({Key? key}) : super(key: key);
@@ -16,7 +16,6 @@ class Angle extends StatefulWidget {
 }
 
 class _AngleState extends State<Angle> {
-  //var angleValue = angels.first;
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(

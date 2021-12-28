@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mobi_lapse/prev_captures_view.dart';
 import 'package:http/http.dart' as http;
 
+import 'angle.dart';
 import 'angles_list.dart';
 
 // const String ROBOT_ADDRESS = 'http://pi';
@@ -115,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           int numberOfItems = ANGLES.length;
                           List<String> angels = [];
                           for (int i = 0; i < numberOfItems; i++) {
-                            angels.add(ANGLES[i].toString());
+                            angels.add(ParseAngle(ANGLES[i].toString()));
                           }
                           print(angels);
                           if (!pressed) {
@@ -148,7 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               : const Text('Begin Capture',
                                   textScaleFactor: 1.4)),
                         ],
-                      )),
+                      ),
+                  ),
                   ElevatedButton(
                     style: TextButton.styleFrom(
                         primary: Colors.white,
@@ -217,7 +219,14 @@ Future<http.Response> sendStopCapture(int numObjects) {
       body: body);
 }
 
+String ParseAngle(String angle){
+  if(angle == angels[2]) {
+    return angle.toUpperCase();
+  }
+  var splitted = angle.split(' ');
+  return "${splitted[0].toUpperCase()}_${splitted[1].toUpperCase()}";
+}
+
 // TODO: when a capture is running, disable the list modification buttons
-// TODO: dropdownlist text should be human readable, and the text inside the list should be CONST_FORMAT
 // TODO: update the previous captures list every time a new Capture object is generated, don't generate them all at the same time and just then return
 // to make the app feel smoother

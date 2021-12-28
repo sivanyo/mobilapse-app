@@ -185,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
 // TODO: add future builder with circle loading and updating result after sending request
 
 Future<void> ActivateListeners() async{
-  final databaseReference = FirebaseDatabase.instance.reference();
+  final databaseReference = FirebaseDatabase.instance.ref();
   databaseReference
       .child('ROBOT_IP')
       .onValue.listen((event) {

@@ -15,11 +15,13 @@ class AnglesList extends StatefulWidget {
 }
 
 class _AnglesList extends State<AnglesList> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     _add() {
       setState(() {
-        if(Capturing != 1){
+        if (Capturing != 1) {
           ANGLES.add(Angle());
         }
       });
@@ -37,6 +39,9 @@ class _AnglesList extends State<AnglesList> {
       body: Column(
         children: [
           Expanded(
+              child: Scrollbar(
+            isAlwaysShown: true,
+            controller: _scrollController,
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: ANGLES.length,
@@ -49,10 +54,9 @@ class _AnglesList extends State<AnglesList> {
                           const TextStyle(fontFamily: 'A', color: Colors.black),
                     ),
                     leading: ANGLES[index],
-                  )
-                  );
+                  ));
                 }),
-          ),
+          )),
           Row(
             children: [
               const Spacer(),
@@ -63,14 +67,11 @@ class _AnglesList extends State<AnglesList> {
                   print(ANGLES.length);
                 },
                 style: ButtonStyle(
-                    backgroundColor:
-
-                    Capturing == 1 ? Disabled : AddColor
-                ),
-                    // Capturing == 0 ?
-                    // MaterialStateProperty.all<Color>(Colors.green) :
-                    // MaterialStateProperty.all<Color>(Colors.grey)),
-                        // MaterialStateProperty.all<Color>(Colors.green)),
+                    backgroundColor: Capturing == 1 ? Disabled : AddColor),
+                // Capturing == 0 ?
+                // MaterialStateProperty.all<Color>(Colors.green) :
+                // MaterialStateProperty.all<Color>(Colors.grey)),
+                // MaterialStateProperty.all<Color>(Colors.green)),
                 child: Row(
                   children: const [
                     Icon(Icons.add),
@@ -86,9 +87,7 @@ class _AnglesList extends State<AnglesList> {
                   print(ANGLES.length);
                 },
                 style: ButtonStyle(
-                    backgroundColor:
-                        Capturing == 1 ? Disabled : RemoveColor
-                ),
+                    backgroundColor: Capturing == 1 ? Disabled : RemoveColor),
                 child: Row(
                   children: const [
                     Icon(Icons.remove),

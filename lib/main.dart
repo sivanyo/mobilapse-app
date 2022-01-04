@@ -86,17 +86,16 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                child: Image.asset(
-                  'assets/images/icon.jpeg',
-                  fit: BoxFit.fitWidth,
-                  width: 120,
-                ),
+              Image.asset(
+                'assets/images/icon.jpeg',
+                fit: BoxFit.fitWidth,
+                width: 160,
               ),
               const Text(
                 'Please configure the number of plants and their location in the track:',
                 textScaleFactor: 1,
                 style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
               ),
               const Expanded(
                 child: Center(child: AnglesList()),
@@ -104,75 +103,69 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.white,
-                      backgroundColor: pressed ? Colors.red : Colors.green,
-                      shadowColor: Colors.teal,
-                      fixedSize: const Size.fromHeight(30),
+              ElevatedButton(
+                style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: pressed ? Colors.red : Colors.green,
+                    shadowColor: Colors.teal,
+                    fixedSize: const Size(200, 30)),
+                onPressed: () async {
+                  try {
+                    int numberOfItems = ANGLES.length;
+                    List<String> angels = [];
+                    for (int i = 0; i < numberOfItems; i++) {
+                      angels.add(ParseAngle(ANGLES[i].toString()));
+                    }
+                    print(angels);
+                    if (!pressed) {
+                      print('Begin');
+                      Capturing = 1;
+                      await sendBeginCapture(numberOfItems, angels);
+                    } else {
+                      print('Stop');
+                      Capturing = 0;
+                      await sendStopCapture(numberOfItems);
+                    }
+                    _update_button();
+                  } on http.ClientException catch (e) {
+                    print('Error connecting to the robot $e');
+                  } on Exception catch (e) {
+                    print('General exception $e');
+                  }
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.video_call),
+                    const SizedBox.square(
+                      dimension: 2,
                     ),
-                    onPressed: () async {
-                      try {
-                        int numberOfItems = ANGLES.length;
-                        List<String> angels = [];
-                        for (int i = 0; i < numberOfItems; i++) {
-                          angels.add(ParseAngle(ANGLES[i].toString()));
-                        }
-                        print(angels);
-                        if (!pressed) {
-                          print('Begin');
-                          Capturing = 1;
-                          await sendBeginCapture(numberOfItems, angels);
-                        } else {
-                          print('Stop');
-                          Capturing = 0;
-                          await sendStopCapture(numberOfItems);
-                        }
-                        _update_button();
-                      } on http.ClientException catch (e) {
-                        print('Error connecting to the robot $e');
-                      } on Exception catch (e) {
-                        print('General exception $e');
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(Icons.video_call),
-                        const SizedBox.square(
-                          dimension: 2,
-                        ),
-                        (pressed
-                            ? const Text(
-                                'Stop Capture',
-                                textScaleFactor: 1.4,
-                              )
-                            : const Text('Begin Capture',
-                                textScaleFactor: 1.4)),
-                      ],
-                    ),
+                    (pressed
+                        ? const Text(
+                            'Stop Capture',
+                            textScaleFactor: 1.4,
+                          )
+                        : const Text('Begin Capture', textScaleFactor: 1.4)),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.lightBlue,
+                    fixedSize: const Size(200, 30)),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CapturesViewRoute()));
+                },
+                child: Row(children: const [
+                  Icon(Icons.video_library),
+                  SizedBox.square(
+                    dimension: 2,
                   ),
-                  ElevatedButton(
-                    style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.lightBlue,
-                        fixedSize: const Size.fromHeight(30)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CapturesViewRoute()));
-                    },
-                    child: Row(children: const [
-                      Icon(Icons.video_library),
-                      SizedBox.square(
-                        dimension: 2,
-                      ),
-                      Text('Show previous lapses', textScaleFactor: 1.4)
-                    ]),
-                  )
-                ],
+                  Text('Show previous lapses', textScaleFactor: 1.0)
+                ]),
               ),
               const SizedBox(
                 height: 8,

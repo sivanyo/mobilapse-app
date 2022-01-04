@@ -68,10 +68,6 @@ class _AnglesList extends State<AnglesList> {
                 },
                 style: ButtonStyle(
                     backgroundColor: Capturing == 1 ? Disabled : AddColor),
-                // Capturing == 0 ?
-                // MaterialStateProperty.all<Color>(Colors.green) :
-                // MaterialStateProperty.all<Color>(Colors.grey)),
-                // MaterialStateProperty.all<Color>(Colors.green)),
                 child: Row(
                   children: const [
                     Icon(Icons.add),
@@ -100,36 +96,6 @@ class _AnglesList extends State<AnglesList> {
           )
         ],
       ),
-      // floatingActionButton: Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     FloatingActionButton.extended(
-      //       onPressed: () {
-      //         print('pressed');
-      //         _add();
-      //         print(ANGLES.length);
-      //       },
-      //       backgroundColor: Colors.green,
-      //       icon: const Icon(Icons.add),
-      //       label: const Text('Add plant'),
-      //     ),
-      //     const SizedBox(
-      //       height: 8,
-      //     ),
-      //     FloatingActionButton.extended(
-      //       onPressed: () {
-      //         print('pressed');
-      //         _remove();
-      //         print(ANGLES.length);
-      //       },
-      //       backgroundColor: Colors.red,
-      //       icon: const Icon(Icons.remove),
-      //       label: const Text('Remove last plant'),
-      //     ),
-      //   ],
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

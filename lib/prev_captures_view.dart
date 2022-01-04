@@ -88,8 +88,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
                           const TextStyle(fontFamily: 'A', color: Colors.black),
                     ),
                     subtitle: Text(
-                      '${captureList.elementAt(index).name}, captured at '
-                      '${captureList.elementAt(index).creationDate}',
+                      'captured at ${DateFormat('yyyy-MM-dd kk:mm:ss').format(captureList.elementAt(index).creationDate)} ',
                       style:
                           const TextStyle(fontFamily: 'B', color: Colors.green),
                     ),

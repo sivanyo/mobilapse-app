@@ -3,7 +3,7 @@ import 'package:mobi_lapse/main.dart';
 import 'angle.dart';
 
 List<Angle> ANGLES = [Angle()];
-var AddColor = MaterialStateProperty.all<Color>(Colors.green);
+var AddColor = MaterialStateProperty.all<Color>(Colors.orange);
 var RemoveColor = MaterialStateProperty.all<Color>(Colors.red);
 var Disabled = MaterialStateProperty.all<Color>(Colors.grey);
 

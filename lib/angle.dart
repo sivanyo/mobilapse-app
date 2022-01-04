@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var angels =  ["hard right", "soft right", "straight", "soft left", "hard left"];
+var angels = ["hard right", "soft right", "straight", "soft left", "hard left"];
 
 class Angle extends StatefulWidget {
   Angle({Key? key}) : super(key: key);

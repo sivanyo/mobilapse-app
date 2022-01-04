@@ -22,8 +22,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
 
   @override
   Widget build(BuildContext context) {
-
-    _addLapse(CaptureItem capture){
+    _addLapse(CaptureItem capture) {
       setState(() {
         captureList.add(capture);
       });
@@ -31,8 +30,10 @@ class _CapturesViewState extends State<CapturesViewRoute> {
 
     void getPreviousCaptures() async {
       print("CALLED!");
-      firebase_storage.ListResult result =
-      await firebase_storage.FirebaseStorage.instance.ref('captures').list();
+      firebase_storage.ListResult result = await firebase_storage
+          .FirebaseStorage.instance
+          .ref('captures')
+          .list();
       print('done getting items');
       for (firebase_storage.Reference ref in result.items) {
         firebase_storage.FullMetadata meta = await ref.getMetadata();
@@ -40,8 +41,8 @@ class _CapturesViewState extends State<CapturesViewRoute> {
         DateTime creationDate = getDateTimeFromName(ref.name);
         String downloadURL = await ref.getDownloadURL();
         // String downloadURL = "test";
-        CaptureItem capture = CaptureItem(ref.name, creationDate, '5 minutes',
-            downloadURL, creationTimeInFirebase);
+        CaptureItem capture = CaptureItem(
+            ref.name, creationDate, downloadURL, creationTimeInFirebase);
         _addLapse(capture);
         print('Found file: $ref');
         print(captureList.length);
@@ -54,7 +55,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
       });
     }
 
-    if (!start){
+    if (!start) {
       start = true;
       captureList.clear();
       getPreviousCaptures();
@@ -65,59 +66,52 @@ class _CapturesViewState extends State<CapturesViewRoute> {
           title: const Text("Previous Lapses"),
           backgroundColor: Colors.green,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               start = false;
-            Navigator.pop(context, false);
-          },
+              Navigator.pop(context, false);
+            },
           ),
         ),
         body: ListView.builder(
             shrinkWrap: true,
             itemCount: captureList.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(
-                  'Watch Capture ${index + 1}',
-                  style: const TextStyle(
-                      fontFamily: 'A', color: Colors.black),
-                ),
-                subtitle: Text(
-                  '${captureList
-                      .elementAt(index)
-                      .name}, captured at '
-                      '${captureList
-                      .elementAt(index)
-                      .creationDate}',
-                  style: const TextStyle(
-                      fontFamily: 'B', color: Colors.green
-                  ),
-                ),
-                leading: const Icon(
-                  Icons.videocam_rounded,
-                  color: Colors.greenAccent,
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              VideoPlayerRoute(
+              return Card(
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: ListTile(
+                    title: Text(
+                      'Watch Capture ${index + 1}',
+                      style:
+                          const TextStyle(fontFamily: 'A', color: Colors.black),
+                    ),
+                    subtitle: Text(
+                      '${captureList.elementAt(index).name}, captured at '
+                      '${captureList.elementAt(index).creationDate}',
+                      style:
+                          const TextStyle(fontFamily: 'B', color: Colors.green),
+                    ),
+                    leading: const Icon(
+                      Icons.videocam_rounded,
+                      color: Colors.blue,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VideoPlayerRoute(
                                   downloadURL:
-                                  captureList[index].downloadURL
-                              )
-                      )
-                  );
-                },
-                onLongPress: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Filename: ${captureList[index].name.toString()}')
+                                      captureList[index].downloadURL)));
+                    },
+                    onLongPress: () {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              'Filename: ${captureList[index].name.toString()}')));
+                    },
                   ));
-                },
-              );
-            })
-    );
+            }));
   }
 
   int getObjectNum(String name) {
@@ -130,11 +124,7 @@ class _CapturesViewState extends State<CapturesViewRoute> {
     final formatter = DateFormat(r'''yyyy-MM-dd'T'hh-mm-ss''');
 
     DateTime formattedObj =
-    formatter.parse(name
-        .split('_')
-        .last
-        .split('.')
-        .first);
+        formatter.parse(name.split('_').last.split('.').first);
     return formattedObj;
   }
 }

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Error loading Firebase ${snapshot.error.toString()}');
-            return Text('Something went wrong!');
+            return const Text('Something went wrong!');
           } else if (snapshot.hasData) {
             return const MyHomePage(title: 'Mobi Lapse');
           } else {
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String downloadUrl = '';
   bool pressed = false;
 
-  void _update_button() {
+  void updateButton() {
     setState(() {
       pressed = !pressed;
     });
@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 160,
               ),
               const Text(
-                'Please configure the number of plants and their location in the track:',
+                'Please configure the number of plants and their location on the track:',
                 textScaleFactor: 1,
                 style: TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     int numberOfItems = ANGLES.length;
                     List<String> angels = [];
                     for (int i = 0; i < numberOfItems; i++) {
-                      angels.add(ParseAngle(ANGLES[i].toString()));
+                      angels.add(parseAngle(ANGLES[i].toString()));
                     }
                     print(angels);
                     if (!pressed) {
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Capturing = 0;
                       await sendStopCapture(numberOfItems);
                     }
-                    _update_button();
+                    updateButton();
                   } on http.ClientException catch (e) {
                     print('Error connecting to the robot $e');
                   } on Exception catch (e) {
@@ -228,7 +228,7 @@ Future<http.Response> sendStopCapture(int numObjects) {
       body: body);
 }
 
-String ParseAngle(String angle) {
+String parseAngle(String angle) {
   if (angle == angels[2]) {
     return angle.toUpperCase();
   }

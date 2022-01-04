@@ -3,8 +3,8 @@ import 'package:mobi_lapse/main.dart';
 import 'angle.dart';
 
 List<Angle> ANGLES = [Angle()];
-var AddColor = MaterialStateProperty.all<Color>(Colors.orange);
-var RemoveColor = MaterialStateProperty.all<Color>(Colors.red);
+var AddColor = MaterialStateProperty.all<Color>(Colors.white);
+var RemoveColor = MaterialStateProperty.all<Color>(Colors.white);
 var Disabled = MaterialStateProperty.all<Color>(Colors.grey);
 
 class AnglesList extends StatefulWidget {
@@ -70,8 +70,14 @@ class _AnglesList extends State<AnglesList> {
                     backgroundColor: Capturing == 1 ? Disabled : AddColor),
                 child: Row(
                   children: const [
-                    Icon(Icons.add),
-                    Text('Add plant'),
+                    Icon(
+                      Icons.add,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      'Add plant',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ],
                 ),
               ),
@@ -86,8 +92,11 @@ class _AnglesList extends State<AnglesList> {
                     backgroundColor: Capturing == 1 ? Disabled : RemoveColor),
                 child: Row(
                   children: const [
-                    Icon(Icons.remove),
-                    Text('Remove plant'),
+                    Icon(
+                      Icons.remove,
+                      color: Colors.black,
+                    ),
+                    Text('Remove plant', style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),

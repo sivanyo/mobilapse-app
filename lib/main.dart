@@ -90,13 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Image.asset(
                   'assets/images/icon.jpeg',
                   fit: BoxFit.fitWidth,
-                  width: 200,
+                  width: 120,
                 ),
               ),
               const Text(
                 'Please configure the number of plants and their location in the track:',
                 textScaleFactor: 1,
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 20),
               ),
               const Expanded(
                 child: Center(child: AnglesList()),

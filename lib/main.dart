@@ -17,6 +17,7 @@ import 'angles_list.dart';
 // Shachar hotspot
 String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
 int Capturing = 0;
+double Speed = 30;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,6 +104,27 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(
                 height: 8,
               ),
+              const Text(
+                'Please choose the robot\'s speed:',
+                textScaleFactor: 1,
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              Slider(
+                value: Speed,
+                label: "Robot\'s Speed",
+                divisions: 20,
+                onChanged: (double value) {
+                  setState(() {
+                    Speed = value;
+                  });
+                },
+                min: 30,
+                max: 70
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               ElevatedButton(
                 style: TextButton.styleFrom(
                     primary: Colors.white,
@@ -120,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (!pressed) {
                       print('Begin');
                       Capturing = 1;
-                      await sendBeginCapture(numberOfItems, angels);
+                      await sendBeginCapture(numberOfItems, angels, Speed.toInt());
                     } else {
                       print('Stop');
                       Capturing = 0;
@@ -191,7 +213,7 @@ Future<void> activateListeners() async {
 }
 
 Future<http.Response> sendBeginCapture(
-    int numObjects, List<String> angles) async {
+    int numObjects, List<String> angles, int speed) async {
   await activateListeners();
   print('Complete ROBOT_IP is: $ROBOT_ADDRESS');
   print('Sending request to begin capture');
@@ -199,6 +221,7 @@ Future<http.Response> sendBeginCapture(
     'message': 'Hello from flutter app ${DateTime.now()}',
     'numObjects': numObjects,
     'objectAngleList': angles,
+    'speed': speed,
     'command': 'start'
   });
   print('Sending request to: $ROBOT_ADDRESS/capture');

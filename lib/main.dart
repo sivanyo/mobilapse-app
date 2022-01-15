@@ -71,14 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
   String downloadUrl = '';
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    fb_db.FirebaseDatabase.instance.ref()
+    fb_db.FirebaseDatabase.instance
+        .ref()
         .child('ROBOT_STATE')
-        .onValue.listen((event) {
-          final currVal = event.snapshot.value.toString();
+        .onValue
+        .listen((event) {
+      final currVal = event.snapshot.value.toString();
       setState(() {
         ROBOT_STATE = int.parse(currVal.toString());
+        print('State is $ROBOT_STATE');
       });
     });
   }
@@ -118,17 +121,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 textAlign: TextAlign.center,
               ),
               Slider(
-                value: Speed,
-                label: "Robot\'s Speed",
-                divisions: 20,
-                onChanged: (double value) {
-                  setState(() {
-                    Speed = value;
-                  });
-                },
-                min: 30,
-                max: 70
-              ),
+                  value: Speed,
+                  label: "Robot\'s Speed",
+                  divisions: 20,
+                  onChanged: (double value) {
+                    setState(() {
+                      Speed = value;
+                    });
+                  },
+                  min: 30,
+                  max: 70),
               const SizedBox(
                 height: 8,
               ),
@@ -149,7 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (ROBOT_STATE == 0) {
                       print('Begin');
                       Capturing = 1;
-                      await sendBeginCapture(numberOfItems, angels, Speed.toInt());
+                      await sendBeginCapture(
+                          numberOfItems, angels, Speed.toInt());
                     } else {
                       print('Stop');
                       Capturing = 0;
@@ -207,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
 // TODO: add future builder with circle loading and updating result after sending request
 
 Future<void> activateListeners() async {
-  final databaseReference = fb_db.FirebaseDatabase.instance.ref();
+  final databaseReference = fb_db.FirebaseDatabase.instance.ref('/RobotData');
   print('Getting ROBOT_IP');
   databaseReference.child('ROBOT_IP').onValue.listen((event) {
     ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart' as fb_db;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +16,13 @@ import 'angles_list.dart';
 // const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
 // Shachar hotspot
 String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
+String ROBOT_STATE = '0';
 int Capturing = 0;
 double Speed = 30;
 
 Future main() async {
+  //ListenToRobotState();
   WidgetsFlutterBinding.ensureInitialized();
-
   runApp(MyApp());
 }
 
@@ -73,6 +74,19 @@ class _MyHomePageState extends State<MyHomePage> {
   void updateButton() {
     setState(() {
       pressed = !pressed;
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    fb_db.FirebaseDatabase.instance.ref()
+        .child('ROBOT_STATE')
+        .onValue.listen((event) {
+          final currVal = event.snapshot.value.toString();
+      setState(() {
+        ROBOT_STATE = currVal;
+      });
     });
   }
 
@@ -201,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
 // TODO: add future builder with circle loading and updating result after sending request
 
 Future<void> activateListeners() async {
-  final databaseReference = FirebaseDatabase.instance.ref();
+  final databaseReference = fb_db.FirebaseDatabase.instance.ref();
   print('Getting ROBOT_IP');
   databaseReference.child('ROBOT_IP').onValue.listen((event) {
     ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";

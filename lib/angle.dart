@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobi_lapse/main.dart';
 
 var angels = ["hard right", "soft right", "straight", "soft left", "hard left"];
 

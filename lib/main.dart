@@ -16,7 +16,7 @@ import 'angles_list.dart';
 // const String ROBOT_ADDRESS = 'http://192.168.43.38:5000';
 // Shachar hotspot
 String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
-String ROBOT_STATE = '0';
+int ROBOT_STATE = 0;
 int Capturing = 0;
 double Speed = 30;
 
@@ -69,13 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
   String downloadUrl = '';
-  bool pressed = false;
-
-  void updateButton() {
-    setState(() {
-      pressed = !pressed;
-    });
-  }
 
   @override
   void initState(){
@@ -85,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .onValue.listen((event) {
           final currVal = event.snapshot.value.toString();
       setState(() {
-        ROBOT_STATE = currVal;
+        ROBOT_STATE = int.parse(currVal.toString());
       });
     });
   }
@@ -142,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: pressed ? Colors.red : Colors.green,
+                    backgroundColor: ROBOT_STATE == 1 ? Colors.red : Colors.green,
                     shadowColor: Colors.teal,
                     fixedSize: const Size(200, 30)),
                 onPressed: () async {
@@ -153,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       angels.add(parseAngle(ANGLES[i].toString()));
                     }
                     print(angels);
-                    if (!pressed) {
+                    if (ROBOT_STATE == 0) {
                       print('Begin');
                       Capturing = 1;
                       await sendBeginCapture(numberOfItems, angels, Speed.toInt());
@@ -162,7 +155,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       Capturing = 0;
                       await sendStopCapture(numberOfItems);
                     }
-                    updateButton();
                   } on http.ClientException catch (e) {
                     print('Error connecting to the robot $e');
                   } on Exception catch (e) {
@@ -175,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     const SizedBox.square(
                       dimension: 2,
                     ),
-                    (pressed
+                    (ROBOT_STATE == 1
                         ? const Text(
                             'Stop Capture',
                             textScaleFactor: 1.4,

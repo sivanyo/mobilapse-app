@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:mobi_lapse/prev_captures_view.dart';
 import 'package:http/http.dart' as http;
 
+import 'alert_dialog.dart';
 import 'angle.dart';
 import 'angles_list.dart';
 
@@ -82,6 +83,34 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         ROBOT_STATE = int.parse(currVal.toString());
         print('State is $ROBOT_STATE');
+      });
+    });
+    fb_db.FirebaseDatabase.instance
+        .ref()
+        .child('AnomalyData')
+        .onValue
+        .listen((event) {
+      var map = Map<dynamic, dynamic>.from(event.snapshot.value as dynamic);
+      setState(() {
+        var index = map['index'];
+        if(index != -1){
+          var error = ParseAlerts(index);
+          showAlertDialog(context, "Anomaly detection" ,error);
+        }
+      });
+    });
+    fb_db.FirebaseDatabase.instance
+        .ref()
+        .child('RobotError')
+        .onValue
+        .listen((event) {
+      var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
+      setState(() {
+        if(map['Detected']){
+          showAlertDialog(context,"Error" ,map['Error']);
+          map['Detected'] = false;
+          UpdateFirebase('RobotError', map);
+        }
       });
     });
   }
@@ -212,9 +241,11 @@ class _MyHomePageState extends State<MyHomePage> {
 Future<void> activateListeners() async {
   final databaseReference = fb_db.FirebaseDatabase.instance.ref('/RobotData');
   print('Getting ROBOT_IP');
-  databaseReference.child('ROBOT_IP').onValue.listen((event) {
-    ROBOT_ADDRESS = "http://${event.snapshot.value}:5000";
-    print('IP received from server: ${event.snapshot.value}');
+  databaseReference.child('ROBOT_DATA').onValue.listen((event) {
+    var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
+    var val = map['ROBOT_IP'];
+    ROBOT_ADDRESS = "http://${val}:5000";
+    print('IP received from server: ${val}');
   });
   databaseReference.child('lastUpdated').onValue.listen((event) {
     print('The IP address was last updated at: ${event.snapshot.value}');

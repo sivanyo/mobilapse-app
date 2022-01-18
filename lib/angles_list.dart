@@ -84,7 +84,7 @@ class _AnglesList extends State<AnglesList> {
               ElevatedButton(
                 onPressed: () {
                   print('pressed');
-                  STATE == 0 ? _add() : null;
+                  ROBOT_STATE == 0 ? _add() : null;
                   print(ANGLES.length);
                 },
                 style: ButtonStyle(
@@ -106,7 +106,7 @@ class _AnglesList extends State<AnglesList> {
               ElevatedButton(
                 onPressed: () {
                   print('pressed');
-                  STATE == 0 ? _remove() : null;
+                  ROBOT_STATE == 0 ? _remove() : null;
                   print(ANGLES.length);
                 },
                 style: ButtonStyle(

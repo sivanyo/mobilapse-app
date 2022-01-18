@@ -90,12 +90,14 @@ class _MyHomePageState extends State<MyHomePage> {
         .child('AnomalyData')
         .onValue
         .listen((event) {
-      var map = Map<dynamic, dynamic>.from(event.snapshot.value as dynamic);
+      var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
       setState(() {
         var index = map['index'];
         if(index != -1){
           var error = ParseAlerts(index);
           showAlertDialog(context, "Anomaly detection" ,error);
+          map['index'] = -1;
+          UpdateFirebase("AnomalyData", map);
         }
       });
     });

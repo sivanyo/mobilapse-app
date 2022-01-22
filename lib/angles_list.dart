@@ -83,10 +83,8 @@ class _AnglesList extends State<AnglesList> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
-                  print('pressed');
                   ROBOT_STATE == 0 ? _add() : null;
-                  print(ANGLES.length);
-                },
+                  },
                 style: ButtonStyle(
                     backgroundColor: STATE == 1 ? Disabled : AddColor),
                 child: Row(
@@ -105,9 +103,7 @@ class _AnglesList extends State<AnglesList> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
-                  print('pressed');
                   ROBOT_STATE == 0 ? _remove() : null;
-                  print(ANGLES.length);
                 },
                 style: ButtonStyle(
                     backgroundColor: STATE == 1 ? Disabled : RemoveColor),

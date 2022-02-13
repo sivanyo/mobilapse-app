@@ -93,9 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
       var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
       setState(() {
         var index = map['index'];
-        if(index != -1){
+        if (index != -1) {
           var error = ParseAlerts(index);
-          showAlertDialog(context, "Anomaly detection" ,error);
+          showAlertDialog(context, "Anomaly detection", error);
           map['index'] = -1;
           UpdateFirebase("AnomalyData", map);
         }
@@ -108,8 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
         .listen((event) {
       var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
       setState(() {
-        if(map['Detected']){
-          showAlertDialog(context,"Error" ,map['Error']);
+        if (map['Detected']) {
+          showAlertDialog(context, "Error", map['Error']);
           map['Detected'] = false;
           UpdateFirebase('RobotError', map);
         }
@@ -122,10 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
         .listen((event) {
       var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
       setState(() {
-        if(map['Detected']){
-          showAlertDialog(context,"Alert" ,map['Error']);
+        if (map['Detected']) {
+          showAlertDialog(context, "Alert", map['Error']);
           map['Detected'] = false;
-          UpdateFirebase('RobotError', map);
+          UpdateFirebase('RobotAlert', map);
         }
       });
     });
@@ -182,7 +182,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor: ROBOT_STATE == 1 ? Colors.red : Colors.green,
+                    backgroundColor:
+                        ROBOT_STATE == 1 ? Colors.red : Colors.green,
                     shadowColor: Colors.teal,
                     fixedSize: const Size(200, 30)),
                 onPressed: () async {

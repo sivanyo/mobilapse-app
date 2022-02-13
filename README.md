@@ -1,16 +1,34 @@
-# mobi_lapse
+# MobiLapse Mobile Application Repository
 
-Mobi Lapse web\android app for IOT Project
+This repository is part of the [MobiLapse](https://github.com/MPTG94/Mobi-Lapse) project, specifically this repository is dedicated to the mobile/web application code.
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
+* Flutter version: 2.5.3
+* Dart version: 2.14.4
+* Minimum Android SDK version: 27
+* Additional needed libraries:
+  * firebase_core
+  * cloud_firestore
+  * firebase_storage
+  * firebase_database
+  * chewie
+  * video_player
+  * intl
+  * http
 
-A few resources to get you started if this is your first Flutter project:
+* The mobile aplication also makes extensive use of Firebase services including Realtime Database and Cloud Storage
+  
+  So in order to run the project properly you will need a `google-services.json` 
+  file with information about your project.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Running Instructions
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* In order to run the project, install the latest version of [Android Studio](https://developer.android.com/studio/intro)
+* Clone the repository using:
+
+  ```git clone https://github.com/sivanyo/mobilapse-app.git mobiapp``` 
+* Install flutter and dart
+* Open the repository using Android Studio
+* Follow the instructions to install needed dart packages
+* Run the app on your Chrome/Edge browser, or on your Android device

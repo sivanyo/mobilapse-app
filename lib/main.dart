@@ -179,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
+              Text('Current speed is : $Speed'),
               Slider(
                   value: Speed,
                   label: "Robot\'s Speed",
@@ -189,7 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   min: 30,
-                  max: 70),
+                  max: 60,
+              activeColor: Colors.blue,
+              inactiveColor: Colors.black45
+              ),
               const SizedBox(
                 height: 8,
               ),

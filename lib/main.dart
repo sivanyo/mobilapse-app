@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Speed = value;
                     });
                   },
-                  min: 30,
+                  min: 20,
                   max: 60,
               activeColor: Colors.blue,
               inactiveColor: Colors.black45

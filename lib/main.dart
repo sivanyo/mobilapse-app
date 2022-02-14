@@ -129,6 +129,20 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
     });
+    fb_db.FirebaseDatabase.instance
+        .ref()
+        .child('RobotWarning')
+        .onValue
+        .listen((event) {
+      var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
+      setState(() {
+        if (map['Detected']) {
+          showAlertDialog(context, "Warning", map['Warning']);
+          map['Detected'] = false;
+          UpdateFirebase('RobotAlert', map);
+        }
+      });
+    });
   }
 
   @override

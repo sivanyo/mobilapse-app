@@ -20,6 +20,7 @@ String ROBOT_ADDRESS = 'http://172.20.10.9:5000';
 int ROBOT_STATE = 0;
 int Capturing = 0;
 double Speed = 30;
+var PrimaryButtonColor = Colors.green;
 
 Future main() async {
   //ListenToRobotState();
@@ -81,7 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
         .listen((event) {
       final currVal = event.snapshot.value.toString();
       setState(() {
+        print("state is now $currVal");
         ROBOT_STATE = int.parse(currVal.toString());
+        if (ROBOT_STATE == 1) {
+          PrimaryButtonColor = Colors.red;
+        } else {
+          PrimaryButtonColor = Colors.green;
+        }
+
         print('State is $ROBOT_STATE');
       });
     });
@@ -182,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text('Current speed is : $Speed'),
               Slider(
                   value: Speed,
-                  label: "Robot\'s Speed",
+                  label: "Robot's Speed",
                   divisions: 20,
                   onChanged: (double value) {
                     setState(() {
@@ -191,17 +199,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   min: 20,
                   max: 60,
-              activeColor: Colors.blue,
-              inactiveColor: Colors.black45
-              ),
+                  activeColor: Colors.blue,
+                  inactiveColor: Colors.black45),
               const SizedBox(
                 height: 8,
               ),
               ElevatedButton(
                 style: TextButton.styleFrom(
                     primary: Colors.white,
-                    backgroundColor:
-                        ROBOT_STATE == 1 ? Colors.red : Colors.green,
+                    backgroundColor: PrimaryButtonColor,
                     shadowColor: Colors.teal,
                     fixedSize: const Size(200, 30)),
                 onPressed: () async {
@@ -279,7 +285,7 @@ Future<void> activateListeners() async {
   databaseReference.child('ROBOT_DATA').onValue.listen((event) {
     var map = Map<String, dynamic>.from(event.snapshot.value as dynamic);
     var val = map['ROBOT_IP'];
-    ROBOT_ADDRESS = "http://${val}:5000";
+    ROBOT_ADDRESS = "http://$val:5000";
     print('IP received from server: ${val}');
   });
   databaseReference.child('lastUpdated').onValue.listen((event) {
